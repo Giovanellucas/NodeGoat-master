@@ -4,23 +4,23 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'npm install'
+                sh '''npm install'''
             }
         }
 
         stage('Testes') {
             steps {
-                sh 'npm test'
+                sh '''npm test'''
             }
         }
     }
 
     post {
         success {
-            echo 'Os testes foram executados com sucesso!'
+            echo '''Os testes foram executados com sucesso!'''
         }
         failure {
-            echo 'Os testes falharam. Verifique os logs para mais informações.'
+            echo '''Os testes falharam. Verifique os logs para mais informações.'''
         }
     }
 }
