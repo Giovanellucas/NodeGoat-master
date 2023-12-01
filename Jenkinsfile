@@ -1,24 +1,50 @@
 pipeline {
     agent any
 
-    tools {nodejs 'node'}
+    options {
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '1'))
+    }
+
+    environment {
+        PATH = "${tool 'Node.js'}/bin:${env.PATH}"
+    }
 
     stages {
-        stage('test'){
-            steps{
-                sh 'npm install'
+        stage('Clone do Repositório Nodegoat') {
+            steps {
+                script {
+                    git 'https://github.com/Giovanellucas/NodeGoat-master.git'
+                }
+            }
+        }
+
+        stage('Configuração do Repositório no Jenkins') {
+            steps {
+                withCredentials([git(credentialsId: 'seu-id-de-credencial-git', url: 'https://github.com/Giovanellucas/NodeGoat-master.git')]) {
+                    sh 'npm install'
+                }
+            }
+        }
+
+        stage('Criação da Stage de Testes') {
+            steps {
                 sh 'npm test'
             }
         }
-        stage('build') {
+
+        stage('Execução e Monitoramento') {
             steps {
-                sh 'docker-compose build' 
             }
         }
-         stage('up') {
+
+        stage('Análise de Logs') {
             steps {
-                sh 'docker-compose up'  
             }
         }
-}
+    }
+
+    post {
+        always {
+        }
+    }
 }
