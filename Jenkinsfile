@@ -5,7 +5,7 @@ pipeline {
         stage('Clone do Repositório Nodegoat') {
             steps {
                 script {
-                    git 'https://github.com/Giovanellucas/NodeGoat-master.git'
+                    git url: 'https://github.com/Giovanellucas/NodeGoat-master.git'
                 }
             }
         }
@@ -31,7 +31,6 @@ pipeline {
         stage('Execução e Monitoramento') {
             steps {
                 script {
-                 
                 }
             }
         }
@@ -39,7 +38,6 @@ pipeline {
         stage('Análise de Logs') {
             steps {
                 script {
-                  
                 }
             }
         }
