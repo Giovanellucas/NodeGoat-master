@@ -2,25 +2,51 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
+        stage('Clone do Repositório Nodegoat') {
             steps {
-                sh '''npm install'''
+                script {
+                    git 'https://github.com/secure-software-engineering/nodegoat.git'
+                }
             }
         }
 
-        stage('Testes') {
+        stage('Configuração do Repositório no Jenkins') {
             steps {
-                sh '''npm test'''
+                script {
+                    withCredentials([git(credentialsId: 'seu-id-de-credencial-git', url: 'https://github.com/secure-software-engineering/nodegoat.git')]) {
+                        sh 'npm install'
+                    }
+                }
+            }
+        }
+
+        stage('Criação da Stage de Testes') {
+            steps {
+                script {
+                    sh 'npm test'
+                }
+            }
+        }
+
+        stage('Execução e Monitoramento') {
+            steps {
+                script {
+                 
+                }
+            }
+        }
+
+        stage('Análise de Logs') {
+            steps {
+                script {
+                  
+                }
             }
         }
     }
 
     post {
-        success {
-            echo 'Os testes foram executados com sucesso!'
-        }
-        failure {
-            echo 'Os testes falharam. Verifique os logs para mais informações.'
+        always {
         }
     }
 }
